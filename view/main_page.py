@@ -1,8 +1,17 @@
 import flet as ft
+
 from flet_core import RoundedRectangleBorder
 
 
-def main_page() -> ft.View:
+def main_page(page: ft.Page) -> ft.View:
+    def go_share(e):
+        page.route = "/share"
+        page.update()
+
+    def go_test(e):
+        page.route = "/test"
+        page.update()
+
     return ft.View(
         route='/',
         appbar=ft.AppBar(
@@ -15,8 +24,10 @@ def main_page() -> ft.View:
             center_title=True,
             bgcolor=ft.colors.WHITE,
         ),
-        padding=ft.padding.all(20),
+        padding=ft.padding.symmetric(horizontal=20),
         bgcolor=ft.colors.WHITE,
+        scroll=ft.ScrollMode.ALWAYS,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         controls=[
             ft.Row(
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -52,55 +63,41 @@ def main_page() -> ft.View:
                     ),
                 ],
             ),
-            ft.Text(
-                value="갤럭시 VS 아이폰",
-                size=24,
-                color=ft.colors.BLACK87,
+            ft.ElevatedButton(
+                content=ft.Text(
+                    value='시장 점유율은 어떻게 될까요?',
+                    size=18,
+                    color=ft.colors.WHITE,
+                    weight=ft.FontWeight.W_500,
+                ),
+                color=ft.colors.WHITE,
+                bgcolor=ft.colors.AMBER,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT: RoundedRectangleBorder(
+                            radius=10,
+                        ),
+                    }
+                ),
+                on_click=go_share
             ),
-            ft.Row(
-                wrap=True,
-                spacing=10,
-                run_spacing=10,
-                controls=[
-                    ft.Container(
-                        content=ft.Text(value='갤럭시'),
-                        bgcolor=ft.colors.PURPLE,
-                        alignment=ft.alignment.center,
-                        width=150,
-                        height=150,
-                    ),
-                    ft.Container(
-                        content=ft.Text(value='아이폰'),
-                        bgcolor=ft.colors.GREY,
-                        alignment=ft.alignment.center,
-                        width=150,
-                        height=150,
-                    )
-                ],
-            ),
-            ft.Container(
-                height=20,
-            ),
-            ft.Text(
-                value="아이폰 모델별 비교",
-                size=24,
-                color=ft.colors.BLACK87,
-            ),
-            ft.Container(
-                height=20,
-            ),
-            ft.Text(
-                value="플랫폼별 특징, 장단점 비교",
-                size=24,
-                color=ft.colors.BLACK87,
-            ),
-            ft.Container(
-                height=20,
-            ),
-            ft.Text(
-                value="플랫폼별 가격 비교",
-                size=24,
-                color=ft.colors.BLACK87,
+            ft.ElevatedButton(
+                content=ft.Text(
+                    value='또래는 어떤 스마트폰을 많이 사용할까요?',
+                    size=18,
+                    color=ft.colors.WHITE,
+                    weight=ft.FontWeight.W_500,
+                ),
+                color=ft.colors.WHITE,
+                bgcolor=ft.colors.AMBER,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT: RoundedRectangleBorder(
+                            radius=10,
+                        ),
+                    }
+                ),
+                on_click=go_test
             ),
         ],
     )
