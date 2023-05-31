@@ -12,6 +12,10 @@ def main_page(page: ft.Page) -> ft.View:
         page.route = "/test"
         page.update()
 
+    def go_chat(e):
+        page.route = "/chat"
+        page.update()
+
     return ft.View(
         route='/',
         appbar=ft.AppBar(
@@ -60,6 +64,17 @@ def main_page(page: ft.Page) -> ft.View:
                                 ),
                             }
                         ),
+                    ),
+
+                    ft.IconButton(
+                        icon=ft.icons.TEXTSMS,
+                        content=ft.Text(
+                            value='Chat GPT 3.5',
+                            # color=ft.colors.WHITE,
+                        ),
+                        tooltip="Chat GPT 3.5",
+                        icon_size=48,
+                        on_click=go_chat
                     ),
                 ],
             ),
