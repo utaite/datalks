@@ -4,12 +4,16 @@ from flet_core import RoundedRectangleBorder
 
 
 def main_page(page: ft.Page) -> ft.View:
-    def go_share(e):
-        page.route = "/share"
+    def go_personal(_):
+        page.route = "/personal"
         page.update()
 
-    def go_test(e):
-        page.route = "/test"
+    def go_price(_):
+        page.route = "/price"
+        page.update()
+
+    def go_share(_):
+        page.route = "/share"
         page.update()
 
     return ft.View(
@@ -83,6 +87,24 @@ def main_page(page: ft.Page) -> ft.View:
             ),
             ft.ElevatedButton(
                 content=ft.Text(
+                    value='언제 사는 게 가장 저렴할까요?',
+                    size=18,
+                    color=ft.colors.WHITE,
+                    weight=ft.FontWeight.W_500,
+                ),
+                color=ft.colors.WHITE,
+                bgcolor=ft.colors.AMBER,
+                style=ft.ButtonStyle(
+                    shape={
+                        ft.MaterialState.DEFAULT: RoundedRectangleBorder(
+                            radius=10,
+                        ),
+                    }
+                ),
+                on_click=go_price
+            ),
+            ft.ElevatedButton(
+                content=ft.Text(
                     value='또래는 어떤 스마트폰을 많이 사용할까요?',
                     size=18,
                     color=ft.colors.WHITE,
@@ -97,7 +119,7 @@ def main_page(page: ft.Page) -> ft.View:
                         ),
                     }
                 ),
-                on_click=go_test
+                on_click=go_personal
             ),
         ],
     )

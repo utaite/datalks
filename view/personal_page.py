@@ -9,13 +9,39 @@ colors = {
     "LG": ft.colors.ORANGE,
     "others": ft.colors.GREEN,
 }
+genders = ["남성", "여성"]
+ages = list(map(lambda x: f"{x}0대{' 이상' if x == 7 else ''}", range(2, 8)))
 
 
-def test_page(page: ft.Page) -> ft.View:
-    li1 = list(csv.reader(open(f"./스마트폰_성별_연령별_점유율_2022.csv", "r", encoding="utf-8-sig")))
+def personal_page(page: ft.Page) -> ft.View:
+    def go_personal_all(_):
+        page.route = "/personal_all"
+        page.update()
 
-    return ft.View(
-        route='/test_page',
+    def on_click(e):
+        if gender.value in genders and age.value in ages:
+            view.controls.pop()
+            view.controls.append(personal_view(li1, 4 + (genders.index(gender.value) + 1) * len(ages) + ages.index(age.value)))
+            view.update()
+
+    li1 = list(csv.reader(open(f"./dataset/스마트폰_성별_연령별_점유율_2022.csv", "r", encoding="utf-8-sig")))
+
+    gender = ft.Dropdown(
+        label="성별",
+        border_color=ft.colors.AMBER,
+        options=[
+            ft.dropdown.Option(x) for x in genders
+        ]
+    )
+    age = ft.Dropdown(
+        label="연령",
+        border_color=ft.colors.AMBER,
+        options=[
+            ft.dropdown.Option(x) for x in ages
+        ]
+    )
+    view = ft.View(
+        route='/personal_page',
         appbar=ft.AppBar(
             automatically_imply_leading=False,
             title=ft.Text(
@@ -64,29 +90,56 @@ def test_page(page: ft.Page) -> ft.View:
                     ),
                 ],
             ),
-            ft.Tabs(
-                scrollable=False,
-                label_color=ft.colors.AMBER,
-                unselected_label_color=ft.colors.BLACK87,
-                indicator_color=ft.colors.AMBER,
-                tabs=[
-                    ft.Tab(
-                        text=x,
-                        content=test_tab_content(list(filter(lambda y: y[0] == x, li1)))
-                    ) for x in unique(map(lambda x: x[0], li1[1:]))
-                ],
+            ft.Row(
+                alignment=ft.MainAxisAlignment.CENTER,
+                controls=[
+                    gender,
+                    age,
+                    ft.ElevatedButton(
+                        content=ft.Text(
+                            value='확인',
+                            size=18,
+                            color=ft.colors.WHITE,
+                            weight=ft.FontWeight.W_500,
+                        ),
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.AMBER,
+                        style=ft.ButtonStyle(
+                            shape={
+                                ft.MaterialState.DEFAULT: RoundedRectangleBorder(
+                                    radius=10,
+                                ),
+                            }
+                        ),
+                        on_click=on_click,
+                    ),
+                    ft.ElevatedButton(
+                        content=ft.Text(
+                            value='전체보기',
+                            size=18,
+                            color=ft.colors.WHITE,
+                            weight=ft.FontWeight.W_500,
+                        ),
+                        color=ft.colors.WHITE,
+                        bgcolor=ft.colors.AMBER,
+                        style=ft.ButtonStyle(
+                            shape={
+                                ft.MaterialState.DEFAULT: RoundedRectangleBorder(
+                                    radius=10,
+                                ),
+                            }
+                        ),
+                        on_click=go_personal_all,
+                    ),
+                ]
             ),
+            ft.Container(),
         ],
     )
+    return view
 
 
-def unique(sequence):
-    seen = set()
-    return [x for x in sequence if not (x in seen or seen.add(x))]
-
-
-def test_tab_content(li1) -> ft.Column():
-    print(li1)
+def personal_view(li1, i) -> ft.Column():
     return ft.Column(
         controls=[
             ft.Column(
@@ -143,7 +196,7 @@ def test_tab_content(li1) -> ft.Column():
                         sections_space=0,
                         center_space_radius=40,
                     ),
-                ]
-            ) for i in range(len(li1))
+                ],
+            ),
         ]
     )

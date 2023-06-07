@@ -4,30 +4,22 @@ import flet as ft
 from flet_core import RoundedRectangleBorder
 
 colors = {
-    "국내": {
-        "Samsung": ft.colors.BLUE,
-        "Apple": ft.colors.BLACK87,
-        "LG": ft.colors.ORANGE,
-        "others": ft.colors.GREEN,
-    },
-    "글로벌": {
-        "Samsung": ft.colors.BLUE,
-        "Apple": ft.colors.BLACK87,
-        "Xiami": ft.colors.PURPLE,
-        "OPPO": ft.colors.AMBER,
-        "vivo": ft.colors.CYAN,
-        "others": ft.colors.GREEN,
-    },
+    "Samsung": ft.colors.BLUE,
+    "Apple": ft.colors.BLACK87,
+    "LG": ft.colors.ORANGE,
+    "others": ft.colors.GREEN,
 }
 
 
-def share_page(page: ft.Page) -> ft.View:
+def personal_all_page(page: ft.Page) -> ft.View:
+    li1 = list(csv.reader(open(f"./dataset/스마트폰_성별_연령별_점유율_2022.csv", "r", encoding="utf-8-sig")))
+
     return ft.View(
-        route='/share_page',
+        route='/personal_all_page',
         appbar=ft.AppBar(
             automatically_imply_leading=False,
             title=ft.Text(
-                value='데이톡스! - 시장 점유율 분석',
+                value='데이톡스! - 성별/연령별 시장 점유율 분석',
                 size=24,
                 color=ft.colors.BLACK87,
             ),
@@ -79,25 +71,26 @@ def share_page(page: ft.Page) -> ft.View:
                 indicator_color=ft.colors.AMBER,
                 tabs=[
                     ft.Tab(
-                        text="국내 점유율",
-                        content=share_tab_content("국내"),
-                    ),
-                    ft.Tab(
-                        text="글로벌 점유율",
-                        content=share_tab_content("글로벌"),
-                    ),
+                        text=x,
+                        content=personal_all_tab_content(list(filter(lambda y: y[0] == x, li1)))
+                    ) for x in unique(map(lambda x: x[0], li1[1:]))
                 ],
-                height=1300,
             ),
         ],
     )
 
 
-def share_tab_content(name) -> ft.Column():
-    li1 = list(csv.reader(open(f"./dataset/스마트폰_점유율_{name}.csv", "r", encoding="utf-8-sig")))
+def unique(sequence):
+    seen = set()
+    return [x for x in sequence if not (x in seen or seen.add(x))]
+
+
+def personal_all_tab_content(li1) -> ft.Column():
     return ft.Column(
         controls=[
             ft.Column(
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
                     ft.Container(
                         height=40,
@@ -105,7 +98,7 @@ def share_tab_content(name) -> ft.Column():
                     ft.Row(
                         controls=[
                                      ft.Text(
-                                         value=f"{li1[0][i * 4 + 1].split(' ')[0]}년 {name} 스마트폰 점유율",
+                                         value=f"{li1[i][0]} - {li1[i][1]} 스마트폰 점유율",
                                          size=24,
                                          color=ft.colors.BLACK87,
                                      ),
@@ -127,49 +120,29 @@ def share_tab_content(name) -> ft.Column():
                                                  bgcolor=v,
                                              ),
                                          ]
-                                     ) for (k, v) in colors[name].items()]
+                                     ) for (k, v) in colors.items()
+                                 ],
                     ),
-                    ft.Row(
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        controls=[
-                            ft.Column(
-                                alignment=ft.MainAxisAlignment.CENTER,
-                                horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
-                                expand=True,
-                                controls=[
-                                    ft.Text(
-                                        value=li1[0][i * 4 + 1 + j],
-                                        size=24,
-                                        color=ft.colors.BLACK87,
-                                        text_align=ft.TextAlign.CENTER,
-                                    ),
-                                    ft.Container(
-                                        height=20,
-                                    ),
-                                    ft.PieChart(
-                                        sections=[
-                                            ft.PieChartSection(
-                                                li1[k][i * 4 + 1 + j],
-                                                title=f"{li1[k][i * 4 + 1 + j]}%",
-                                                title_style=ft.TextStyle(
-                                                    color=ft.colors.WHITE,
-                                                    size=15,
-                                                ),
-                                                color=colors[name][li1[k][0]],
-                                                radius=40,
-                                                border_side=ft.BorderSide(0, ft.colors.with_opacity(0, ft.colors.WHITE))
-                                            ) for k in range(1, len(li1))
-                                        ],
-                                        height=120,
-                                        width=120,
-                                        sections_space=0,
-                                        center_space_radius=40,
-                                    ),
-                                ]
-                            ) for j in range(4)
+                    ft.PieChart(
+                        sections=[
+                            ft.PieChartSection(
+                                li1[i][j],
+                                title=f"{li1[i][j]}%",
+                                title_style=ft.TextStyle(
+                                    color=ft.colors.WHITE,
+                                    size=15,
+                                ),
+                                color=list(colors.values())[j - 2],
+                                radius=40,
+                                border_side=ft.BorderSide(0, ft.colors.with_opacity(0, ft.colors.WHITE))
+                            ) for j in range(2, len(li1[0]))
                         ],
+                        height=120,
+                        width=120,
+                        sections_space=0,
+                        center_space_radius=40,
                     ),
                 ]
-            ) for i in range(len(li1[0]) // 4)
+            ) for i in range(len(li1))
         ]
     )
