@@ -4,6 +4,10 @@ from flet_core import RoundedRectangleBorder
 
 
 def main_page(page: ft.Page) -> ft.View:
+    def go_chat(_):
+        page.route = "/chat"
+        page.update()
+
     def go_personal(_):
         page.route = "/personal"
         page.update()
@@ -64,6 +68,7 @@ def main_page(page: ft.Page) -> ft.View:
                                 ),
                             }
                         ),
+                        on_click=go_chat,
                     ),
                 ],
             ),

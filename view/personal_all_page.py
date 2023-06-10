@@ -75,6 +75,7 @@ def personal_all_page(page: ft.Page) -> ft.View:
                         content=personal_all_tab_content(list(filter(lambda y: y[0] == x, li1)))
                     ) for x in unique(map(lambda x: x[0], li1[1:]))
                 ],
+                height=1650,
             ),
         ],
     )
@@ -122,6 +123,9 @@ def personal_all_tab_content(li1) -> ft.Column():
                                          ]
                                      ) for (k, v) in colors.items()
                                  ],
+                    ),
+                    ft.Container(
+                        height=20,
                     ),
                     ft.PieChart(
                         sections=[

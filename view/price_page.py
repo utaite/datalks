@@ -42,40 +42,7 @@ def price_page(page: ft.Page) -> ft.View:
         scroll=ft.ScrollMode.ALWAYS,
         controls=[
             ft.Row(
-                alignment=ft.MainAxisAlignment.CENTER,
-                controls=[
-                    ft.TextField(
-                        width=500,
-                        text_size=18,
-                        color=ft.colors.BLACK87,
-                        border_radius=10,
-                        border_color=ft.colors.AMBER,
-                        hint_text='지금 무엇이 궁금한가요?',
-                        hint_style=ft.TextStyle(
-                            size=18,
-                            color=ft.colors.GREY,
-                        ),
-                    ),
-                    ft.ElevatedButton(
-                        content=ft.Text(
-                            value='질문',
-                            size=18,
-                            color=ft.colors.WHITE,
-                            weight=ft.FontWeight.W_500,
-                        ),
-                        color=ft.colors.WHITE,
-                        bgcolor=ft.colors.AMBER,
-                        style=ft.ButtonStyle(
-                            shape={
-                                ft.MaterialState.DEFAULT: RoundedRectangleBorder(
-                                    radius=10,
-                                ),
-                            }
-                        ),
-                    ),
-                ],
-            ),
-            ft.Row(
+                wrap=True,
                 alignment=ft.MainAxisAlignment.CENTER,
                 controls=[
                     ft.ElevatedButton(
