@@ -1,8 +1,6 @@
 import csv
 import flet as ft
 
-from flet_core import RoundedRectangleBorder
-
 colors = {
     "국내": {
         "Samsung": ft.colors.BLUE,
